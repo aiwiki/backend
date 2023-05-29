@@ -216,39 +216,51 @@ class UserSongSerializer(serializers.ModelSerializer):
         model = Usersong
         fields = '__all__'
 
+from datetime import datetime
 
 class UpdateUserSongSerializer(serializers.ModelSerializer):
-    islike = serializers.BooleanField(required=True)
+    islike = serializers.BooleanField(required=False)
+    recenly_listen_date = serializers.DateField(required=False)
+    duration = serializers.FloatField(required=False)
 
     class Meta:
         model = Usersong
-        fields = ['islike']
-
+        fields = ['islike', 'recenly_listen_date', 'duration']
     def update(self, instance, validated_data):
-        instance.islike = validated_data['islike']
+        islike = validated_data.get('islike') if validated_data.get('islike') else instance.islike
+        recenly_listen_date = validated_data.get('recenly_listen_date') if validated_data.get('recenly_listen_date') else datetime.now().date()
+        duration = validated_data.get('duration') if validated_data.get('duration') else instance.duration
+        instance.islike = islike
+        instance.recenly_listen_date = recenly_listen_date
+        instance.duration = duration
         instance.save()
         return instance
 class AddUserSongSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usersong
-        fields = ['id_user', 'id_song','islike']
+        fields = ['id_user', 'id_song','islike', 'recenly_listen_date', 'duration']
 
     def create(self, validated_data):
         id_user = validated_data.get('id_user')
         song_id = validated_data.get('id_song')
         islike = validated_data.get('islike') if validated_data.get('islike') else False
+        recenly_listen_date = validated_data.get('recenly_listen_date') if validated_data.get('recenly_listen_date') else datetime.now().date()
         duration = validated_data.get('duration') if validated_data.get('duration') else 0
         user_song = Usersong.objects.create(
             id_user=id_user,
             id_song=song_id,
             islike= islike,
+            recenly_listen_date=recenly_listen_date,
             duration=duration
+
         )
         return user_song
+    
 class Song4ListenWeekSerializer(serializers.ModelSerializer):
+    artists = ArtistForSongSerializer(many=True)
     class Meta:
         model = Song
-        fields = ['title', 'artists']
+        fields = ['id','title', 'artists', 'thumbnail', 'audio', 'duration']
 
 class SongListenWeekSerializer(serializers.ModelSerializer):
     # get name song

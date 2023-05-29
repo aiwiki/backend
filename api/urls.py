@@ -15,6 +15,7 @@ urlpatterns = [
     path('api/songs',views.SongListApiView.as_view()),
     path('api/song/<str:id>',views.SongDetailApiView.as_view()),
     path('api/artist/<str:alias>',views.ArtistWithSongsApiView.as_view()),
+    path('api/artists/popular', views.GetPopularArtist.as_view(), name='popular artist'),
     path('api/categories', views.CategoryListApiView.as_view()),
     path('api/category/<str:alias>',views.CategoryDetailApiView.as_view()),
     path('api/audio/<str:id>',views.AudioApiView, name="audio"),
@@ -24,10 +25,10 @@ urlpatterns = [
     path('api/register', views.UserRegisterApiView.as_view(), name='register'),
     path('api/login', views.UserLoginApiView.as_view(), name='login'),
     path('api/user', views.CurrentUserView.as_view(), name='user'),
-    path('api/user/add-song-user', views.AddSongFavorite.as_view(), name='adduser'),
+    path('api/user/add-song-user', views.SongFavorite.as_view(), name='adduser'),
     path("api/user/playlist/<str:id>", views.PlaylistWithSongUserDetailApiView.as_view(), name=""),
     path("api/user/album/<str:id>", views.AlbumDetailUserApiView.as_view(), name=""),
-
+    path('api/user/recently-played', views.GetRecenlyListen.as_view(), name='recently played'),
 
     # search
     path('api/search/', views.SearchAPIView.as_view(), name='search'),
@@ -35,6 +36,7 @@ urlpatterns = [
     #  recommend
     path('api/user/recommend/', views.SongRecommend.as_view(), name='recommend'),
     path('api/user/recommend/album', views.AlbumRecommend.as_view(), name='recommend'),
+    path('api/random-albums', views.GetRandomAlbumFLWCate.as_view(), name='random albums'),
     
     # update luot nghe
     path('api/song/update-listen/<str:id>', views.UpdateSongListen.as_view(), name='update listen'),

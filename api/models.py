@@ -63,6 +63,8 @@ class Category(models.Model):
     class Meta:
         managed = False
         db_table = 'Category'
+    def __str__(self) -> str:
+        return self.id
 
 
 
@@ -322,7 +324,7 @@ class Usersong(models.Model):
     id_user = models.ForeignKey(User, models.DO_NOTHING, db_column='id_user', to_field='username', blank=True, null=True)
     id_song = models.ForeignKey(Song, models.DO_NOTHING, db_column='id_song', blank=True, null=True)
     islike = models.BooleanField(blank=True, null=True)
-    duration = models.IntegerField(blank=True, null=True)
+    duration = models.FloatField(blank=True, null=True)
     recenly_listen_date = models.DateField(blank=True, null=True)
 
     class Meta:
